@@ -1,73 +1,92 @@
-import * as React from 'react';
-import Card from '@mui/material/Card';
-import CardHeader from '@mui/material/CardHeader';
-import CardMedia from '@mui/material/CardMedia';
-import CardContent from '@mui/material/CardContent';
-import CardActions from '@mui/material/CardActions';
-import Avatar from '@mui/material/Avatar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import { red } from '@mui/material/colors';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
+import React, { useState } from 'react';
+import { Container, Grid, Typography, Paper, Select, MenuItem, Box } from '@mui/material';
+import EventCard from './Card';
 
+const events = [
+  {
+    profilePic: "url_to_profile_picture1",
+    username: "Vorapong J.",
+    postTime: "30 เมษายน เวลา 21:59 น.",
+    image: "G1.png",
+    title: "UNO",
+    date: "วันอาทิตย์ที่ 1 พฤษภาคม พ.ศ. 2567 เวลา 15.00 น.",
+    content: "หาเพื่อนเล่นบอร์ดเกม UNO ชิวๆไม่ซีเรียส สี่-5 คน สถานที่: ร้าน outcast gaming",
+    participants: 1,
+    maxParticipants: 5,
+  },
+  {
+    profilePic: "url_to_profile_picture2",
+    username: "Jane D.",
+    postTime: "2 พฤษภาคม เวลา 18:00 น.",
+    image: "G2.jpg",
+    title: "Werewolf",
+    date: "วันพฤหัสบดีที่ 3 พฤษภาคม พ.ศ. 2567 เวลา 19.00 น.",
+    content: "หาเพื่อนเล่น Werewolf กลางคืน สนุกสนาน",
+    participants: 2,
+    maxParticipants: 10,
+  },
+  {
+    profilePic: "url_to_profile_picture3",
+    username: "John S.",
+    postTime: "5 พฤษภาคม เวลา 20:00 น.",
+    image: "G3.webp",
+    title: "Magic the Gathering",
+    date: "วันเสาร์ที่ 6 พฤษภาคม พ.ศ. 2567 เวลา 14.00 น.",
+    content: "Magic the Gathering commander game, new players welcome.",
+    participants: 3,
+    maxParticipants: 6,
+  },
+  {
+    profilePic: "url_to_profile_picture4",
+    username: "Emily R.",
+    postTime: "7 พฤษภาคม เวลา 17:00 น.",
+    image: "G4.avif",
+    title: "Catan",
+    date: "วันอาทิตย์ที่ 8 พฤษภาคม พ.ศ. 2567 เวลา 16.00 น.",
+    content: "เล่นบอร์ดเกม Catan หาเพื่อนใหม่",
+    participants: 4,
+    maxParticipants: 4,
+  },
+];
 
-const RecipeReviewCard = ({ item }) => {
-  const [expanded, setExpanded] = React.useState(false);
+function RecipeReviewCard() {
+  const [filter, setFilter] = useState(''); // State for filter selection, defaulting to "All"
 
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
+  const handleFilterChange = (event) => {
+    setFilter(event.target.value); // Update the filter state when selection changes
   };
 
+  const filteredEvents = filter === 'new' ? events.slice().reverse() : events;
+
   return (
-    <div className="section-container bg-gradient-to-r from-[#000000] from-0% to-[#000000] 
-    to-100% flex justify-center items-center">
-      <div className='py-24 flex flex-col md:flex-row-reverse  items-center'>
-        <div className='flex flex-col md:flex-row items-center ' >
-          <Card sx={{ maxWidth: 345 }}>
-            <CardHeader
-              avatar={
-                <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                  <img src="/P1.png" alt="" className='h-12 pr-1 mx-auto' />
-                </Avatar>
-              }
-              action={
-                <IconButton aria-label="settings">
-                  <MoreVertIcon />
-                </IconButton>
-              }
-              title="Dream"
-              subheader="29 february 2024"
-            />
-            <CardMedia
-              component="img"
-              height="194"
-              image="/G1.png"
-              alt="Paella dish"
-            />
-            <CardContent>
-              <Typography variant="body2" color="text-black">
-              เกมเศรษฐี
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-              วันศุกร์ที่ 1 มีนาคม พ.ศ. 2567   เวลา 15.00 น.
-              </Typography>
-            </CardContent>
-            <CardContent>
-              <Typography variant="body2" color="text.secondary">
-              หาเพื่อนเล่นบอร์ดเกม ชิวๆไม่ซีเรียส สัก4-5 คน
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-              จำนวนคนจะไป : 1/5
-              </Typography>
-            </CardContent>
-            <CardActions disableSpacing>
-            <button className=" btn btn-block btn-outline btn-red">Comment</button>
-            </CardActions>
-          </Card>
-        </div>
-      </div>
-    </div>
+    <Container sx={{ padding: '2rem 0' }}>
+      <Grid container spacing={3} justifyContent="center">
+        <Grid item xs={12}>
+          <Paper sx={{ padding: '1rem', marginBottom: '2rem', textAlign: 'center' }}>
+            <Typography variant="h4" component="div" gutterBottom>
+              Featured Games
+            </Typography>
+            <Select
+              value={filter}
+              onChange={handleFilterChange}
+              sx={{ marginBottom: '1rem', minWidth: '150px' }}
+            >
+              <MenuItem value="All">All</MenuItem>
+              <MenuItem value="new">New</MenuItem>
+              <MenuItem value="old">Old</MenuItem>
+            </Select>
+          </Paper>
+        </Grid>
+        {filteredEvents.map((event, index) => (
+          <Grid item key={index} xs={12} sm={8} md={6} lg={4} xl={3}>
+            <EventCard {...event} />
+          </Grid>
+        ))}
+      </Grid>
+    </Container>
   );
 }
 
-export default RecipeReviewCard
+export default RecipeReviewCard;
+
+

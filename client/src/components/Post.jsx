@@ -1,65 +1,54 @@
-import * as React from 'react';
-import { Link } from 'react-router-dom';
-import Box from '@mui/joy/Box';
-import Button from '@mui/joy/Button';
-import FormControl from '@mui/joy/FormControl';
-import FormLabel from '@mui/joy/FormLabel';
-import Textarea from '@mui/joy/Textarea';
-
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { FormControl, FormLabel, InputBase, Button, Box } from '@mui/material';
 
 export default function Post() {
-  const [italic, setItalic] = React.useState(false);
-  const [fontWeight, setFontWeight] = React.useState('normal');
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [italic, setItalic] = useState(false);
+  const [fontWeight, setFontWeight] = useState('normal');
+  const navigate = useNavigate();
+
   return (
-    <div className='py-24 flex flex-col bg-black  '>
-      <FormControl sx={{
-        bgcolor: "black"
-
-      }}>
-        <FormLabel sx={{
-          color: "white",
-          bgcolor: "black"
-        }}>Let's create a party for fun</FormLabel>
-
-        <Link to="/Createpost">
-          <Textarea
-            placeholder="Type something here…"
+    <div className='py-24 flex flex-col justify-center items-center bg-black'>
+      <FormControl>
+        <FormLabel sx={{ color: 'white', fontSize: '24px' }}>Let's create a party for fun</FormLabel>
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            boxShadow: '0px 2px 4px rgba(0, 0.5, 0.5, 0.5)',
+            backgroundColor: 'white',
+            borderRadius: '10px',
+            border: '1px solid #ccc',
+            padding: '10px',
+            overflow: 'hidden',
+          }}
+        >
+          <InputBase
+            multiline
             minRows={3}
-            endDecorator={
-              <Box
-                sx={{
-                  display: 'flex',
-                  gap: 'var(--Textarea-paddingBlock)',
-                  pt: 'var(--Textarea-paddingBlock)',
-                  borderTop: '1px solid',
-                  borderColor: 'divider',
-                  flex: 'auto',
-
-                }}
-              >
-
-                <Button sx={{
-                  ml: 'auto'
-                }} >post</Button>
-              </Box>
-            }
+            placeholder="Type something here…"
             sx={{
-              minWidth: 300,
+              flex: 1,
+              marginRight: '18px',
+              minWidth: { xs: '300px', sm: '500px', md: '800px', lg: '1200px' },
+              fontSize: '16px',
+              padding: '12px 16px',
               fontWeight,
               fontStyle: italic ? 'italic' : 'initial',
-              //bgcolor: "black",
-              //color:"white"
-
-
+              textAlign: 'left',
             }}
           />
-        </Link>
+          <Button
+            variant="contained"
+            onClick={() => navigate('/create-post')}
+            sx={{ backgroundColor: 'crimson', height: '100px' }}
+          >
+            Post
+          </Button>
+        </Box>
       </FormControl>
     </div>
   );
 }
-
-
 
 

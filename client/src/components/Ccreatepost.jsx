@@ -1,97 +1,133 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import InputLabel from '@mui/material/InputLabel';
-import InputAdornment from '@mui/material/InputAdornment';
-import FormControl from '@mui/material/FormControl';
-import Card from '@mui/material/Card';
 import TextField from '@mui/material/TextField';
-import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import Stack from '@mui/material/Stack';
+import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+import dayjs from 'dayjs';
 
 
-const VisuallyHiddenInput = styled('input')({
-  clip: 'rect(0 0 0 0)',
-  clipPath: 'inset(50%)',
-  height: 1,
-  overflow: 'hidden',
-  position: 'absolute',
-  bottom: 0,
-  left: 0,
-  whiteSpace: 'nowrap',
-  width: 1,
-});
+const VisuallyHiddenInput = (props) => (
+  <input
+    accept="image/*"
+    className="visually-hidden"
+    id="upload-file"
+    multiple
+    type="file"
+    {...props}
+  />
+);
 
+export default function CreatePost() {
+  const [selectedDate, setSelectedDate] = React.useState(null);
+  const [value, setValue] = React.useState(null);
+  const [numberOfPlayers, setNumberOfPlayers] = React.useState(0);
 
-export default function Ccreatepost() {
-
+  const handleNumberChange = (event) => {
+    let value = event.target.value;
+    // Convert to number and check if it's less than 0
+    if (parseInt(value) < 0) {
+      // If less than 0, set it to 0
+      value = 0;
+    }
+    setNumberOfPlayers(value);
+  };
+  
+  
 
   return (
-    <div className="section-container bg-gradient-to-r from-[#000000] from-0% to-[#000000] 
-    to-100% flex justify-center items-center" >
-      <div className='flex flex-col md:flex-row items-center '>
-        <div className='py-24 flex flex-col  '>
-          <Card sx={{ maxWidth: 600 }}>
-            <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
-              <div>
-                <h1>Create a board game post</h1>
-                <FormControl color="w" sx={{ m: 1, width: '25ch' }} variant="outlined">
-                </FormControl>
-                <FormControl fullWidth sx={{ m: 1 }}>
-                  <InputLabel htmlFor="outlined-adornment-amount">Board game name</InputLabel>
-                  <OutlinedInput
-                    id="outlined-adornment-amount"
-                    startAdornment={<InputAdornment position="start">Board game name</InputAdornment>}
-                    label="Amount"
-                  />
-                </FormControl>
-                <FormControl color="w" sx={{ m: 1, width: '25ch' }} variant="outlined">
-                </FormControl>
-                <FormControl fullWidth sx={{ m: 1 }}>
-                  <InputLabel htmlFor="outlined-adornment-amount">Post details</InputLabel>
-                  <OutlinedInput
-                    id="outlined-adornment-amount"
-                    startAdornment={<InputAdornment position="start">Post details </InputAdornment>}
-                    label="Amount"
-                  />
-                </FormControl>
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh',
+        backgroundColor: '#000000',
+      }}
+    >
+      <Card sx={{ maxWidth: 600 }}>
+        <CardContent>
+          <Typography variant="h4" gutterBottom>Create a board game post</Typography>
+          <TextField
+            fullWidth
+            label="Board game name"
+            placeholder="mtg werewolf monopoly game and others"
+            multiline
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            fullWidth
+            label="Post details"
+            placeholder="Details"
+            multiline
+            sx={{ mb: 2 }}
+          />
 
-                <TextField
-                  id="outlined-controlled"
-                  label="Select an appointment date"
-                  defaultValue="MM/DD/YYYY"
-                />
-                <TextField
-                  id="outlined-uncontrolled"
-                  label="Select an appointment time"
-                  defaultValue="hh:mm aa"
-                />
-                <TextField
-                  id="outlined-uncontrolled"
-                  label="Select Number of Player"
-                  defaultValue="Select Number of Player"
-                />
-
-                <Button
-                  component="label"
-                  role={undefined}
-                  variant="contained"
-                  tabIndex={-1}
-                  startIcon={<CloudUploadIcon />}
-                >
-                  Upload file
-                  <VisuallyHiddenInput type="file" />
-                </Button>
-              
-                  <button className=" btn btn-block btn-outline btn-red">Create Post</button>
-               
-              </div>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <Box sx={{ mb: 2 }}>
+              <DatePicker
+                label="Select an appointment date"
+                value={selectedDate}
+                onChange={(newValue) => setSelectedDate(newValue)}
+                renderInput={(params) => <TextField fullWidth {...params} />}
+              />
             </Box>
-          </Card>
-        </div>
-      </div>
-    </div>
+          </LocalizationProvider>
 
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <Box sx={{ mb: 2 }}>
+              <Stack spacing={2} sx={{ minWidth: 305 }}>
+                <TimePicker
+                  label= "Choose an appointment time "
+                  value={value}
+                  onChange={setValue}
+                  referenceDate={dayjs('2022-04-17')}
+                />
+              </Stack>
+            </Box>
+          </LocalizationProvider>
+
+          <TextField
+            fullWidth
+            type="number"
+            label="Number of Players"
+            placeholder="Enter number of players"
+            variant="outlined"
+            InputLabelProps={{ shrink: true }}
+            inputProps={{ min: 0 }}
+            value={numberOfPlayers}
+            onChange={handleNumberChange} // Call the handleNumberChange function on change
+            onBlur={handleNumberChange} // Call the handleNumberChange function on blur
+            sx={{ mb: 2 }}
+          />
+          <label htmlFor="upload-file">
+            <Button
+              variant="contained"
+              startIcon={<CloudUploadIcon />}
+              InputLabelProps={{ shrink: true }}
+              inputProps={{ min: 0 }} // Set the minimum value to 0
+              sx={{ mb: 2 }}
+            >
+              <VisuallyHiddenInput />
+            </Button>
+          </label>
+          <Button
+            variant="outlined"
+            color="primary"
+            fullWidth
+            sx={{ color: 'black', borderColor: 'black' }}
+          >
+            Create Post
+          </Button>
+        </CardContent>
+      </Card>
+    </Box>
   );
 }
