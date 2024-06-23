@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
-import { AppBar, Toolbar, IconButton, Typography, Button, Input, Box, Drawer, List, ListItem, ListItemText } from '@mui/material';
+import {
+    AppBar, Toolbar, IconButton, Typography, Input, Box, Drawer,
+    List, ListItem, ListItemText, Button
+} from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { Link, useNavigate } from 'react-router-dom';
+import { FaCircleUser } from 'react-icons/fa6';
 import FilterComponent from './FilterComponent'; // Ensure the path is correct
 
 const Navbar = () => {
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
+    const [isLoggedIn, setIsLoggedIn] = useState(false); // State to check if the user is logged in
     const navigate = useNavigate(); // Hook for navigation
 
     const toggleDrawer = (open) => (event) => {
@@ -20,11 +25,23 @@ const Navbar = () => {
         setSearchQuery(event.target.value);
     };
 
-    const handleNavigateToLogin = () => {
+    const navigateToLogin = () => {
         navigate('/login');
     };
 
-    const list = () => (
+    const navigateToRegister = () => {
+        navigate('/login?register=true');
+    };
+
+    const navigateToNotifications = () => {
+        navigate('/notifications');
+    };
+
+    const navigateToParticipationHistory = () => {
+        navigate('/participation-history');
+    };
+
+    const drawerList = () => (
         <Box
             sx={{ width: 250 }}
             role="presentation"
@@ -35,10 +52,10 @@ const Navbar = () => {
                 <ListItem button component={Link} to="/">
                     <ListItemText primary="Home" />
                 </ListItem>
-                <ListItem button onClick={handleNavigateToLogin}>
-                    <ListItemText primary="Show participation history" />
+                <ListItem button onClick={navigateToParticipationHistory}>
+                    <ListItemText primary="Show Participation History" />
                 </ListItem>
-                <ListItem button onClick={handleNavigateToLogin}>
+                <ListItem button component={Link} to="/notifications">
                     <ListItemText primary="Notifications" />
                 </ListItem>
                 <ListItem button component={Link} to="/rules">
@@ -69,22 +86,18 @@ const Navbar = () => {
                     open={drawerOpen}
                     onClose={toggleDrawer(false)}
                 >
-                    {list()}
+                    {drawerList()}
                 </Drawer>
                 <Link to="/">
                     <img src='logoDice.png' alt="DiceDreams Logo" style={{ marginRight: '18px', height: '64px' }} />
                 </Link>
                 <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
-                    <Typography variant="h6" component="div" sx={{ cursor: 'pointer' }}>
-                        <Typography variant="h6" component="span" sx={{ color: 'crimson', fontWeight: 'bold' }}>
-                            Dice
-                        </Typography>
-                        <Typography variant="h6" component="span" sx={{ color: 'black', fontWeight: 'bold' }}>
-                            Dreams
-                        </Typography>
+                    <Typography variant="h6" component="div" sx={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
+                        <span style={{ color: 'crimson', fontWeight: 'bold' }}>Dice</span>
+                        <span style={{ color: 'black', fontWeight: 'bold' }}>Dreams</span>
                     </Typography>
                 </Link>
-                <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1, marginLeft: 2 }}>
                     <Input
                         placeholder="Search..."
                         value={searchQuery}
@@ -92,8 +105,16 @@ const Navbar = () => {
                         sx={{ marginLeft: 2 }}
                     />
                 </Box>
-                <Button color="inherit" onClick={handleNavigateToLogin}>Register</Button>
-                <Button variant="contained" color="primary" onClick={handleNavigateToLogin}>Log in</Button>
+                {isLoggedIn ? (
+                    <IconButton color="inherit" onClick={navigateToLogin}>
+                        <FaCircleUser size={24} />
+                    </IconButton>
+                ) : (
+                    <>
+                        <Button color="inherit" onClick={navigateToLogin}>Log in</Button>
+                        <Button variant="contained" color="primary" onClick={navigateToRegister}>Register</Button>
+                    </>
+                )}
             </Toolbar>
         </AppBar>
     );

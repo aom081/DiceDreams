@@ -1,8 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Button, TextField, Typography, Link, Radio, RadioGroup, FormControlLabel, FormLabel, ButtonGroup } from '@mui/material';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 function LoginPage() {
     const [isRegister, setIsRegister] = useState(false);
+    const [formData, setFormData] = useState({
+        name: '',
+        username: '',
+        telephone: '',
+        email: '',
+        password: '',
+        dateOfBirth: '',
+        gender: '',
+        usernameOrEmail: '',
+        loginPassword: ''
+    });
+
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const queryParams = new URLSearchParams(location.search);
+        if (queryParams.get('register') === 'true') {
+            setIsRegister(true);
+        }
+    }, [location]);
 
     const handleLogin = () => {
         // Logic to handle login
@@ -16,7 +38,15 @@ function LoginPage() {
 
     const handleCancel = () => {
         // Logic to handle cancel and navigate to home page
-        console.log('Cancel button clicked');
+        navigate('/');
+    };
+
+    const handleInputChange = (event) => {
+        const { name, value } = event.target;
+        setFormData({
+            ...formData,
+            [name]: value
+        });
     };
 
     const handleSwitchToRegister = () => {
@@ -63,6 +93,9 @@ function LoginPage() {
                             variant="filled"
                             fullWidth
                             margin="normal"
+                            name="name"
+                            value={formData.name}
+                            onChange={handleInputChange}
                             InputProps={{ style: { color: 'white' } }}
                             InputLabelProps={{ style: { color: 'white' } }}
                         />
@@ -71,6 +104,9 @@ function LoginPage() {
                             variant="filled"
                             fullWidth
                             margin="normal"
+                            name="username"
+                            value={formData.username}
+                            onChange={handleInputChange}
                             InputProps={{ style: { color: 'white' } }}
                             InputLabelProps={{ style: { color: 'white' } }}
                         />
@@ -79,6 +115,9 @@ function LoginPage() {
                             variant="filled"
                             fullWidth
                             margin="normal"
+                            name="telephone"
+                            value={formData.telephone}
+                            onChange={handleInputChange}
                             InputProps={{ style: { color: 'white' } }}
                             InputLabelProps={{ style: { color: 'white' } }}
                         />
@@ -87,6 +126,9 @@ function LoginPage() {
                             variant="filled"
                             fullWidth
                             margin="normal"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleInputChange}
                             InputProps={{ style: { color: 'white' } }}
                             InputLabelProps={{ style: { color: 'white' } }}
                         />
@@ -96,20 +138,26 @@ function LoginPage() {
                             variant="filled"
                             fullWidth
                             margin="normal"
+                            name="password"
+                            value={formData.password}
+                            onChange={handleInputChange}
                             InputProps={{ style: { color: 'white' } }}
                             InputLabelProps={{ style: { color: 'white' } }}
                         />
                         <TextField
+                            label="Date of Birth"
                             type="date"
                             variant="filled"
                             fullWidth
                             margin="normal"
+                            name="dob"
+                            value={formData.dob}
+                            onChange={handleInputChange}
                             InputProps={{ style: { color: 'white' } }}
-                            InputLabelProps={{ style: { color: 'white' } }}
-                            InputLabelProps1={{ shrink: true }}
+                            InputLabelProps={{ style: { color: 'white' }, shrink: true }}
                         />
                         <FormLabel component="legend" style={{ color: 'white', marginTop: '1rem' }}>Gender</FormLabel>
-                        <RadioGroup row>
+                        <RadioGroup row name="gender" value={formData.gender} onChange={handleInputChange}>
                             <FormControlLabel value="female" control={<Radio style={{ color: 'white' }} />} label={<Typography style={{ color: 'white' }}>Female</Typography>} />
                             <FormControlLabel value="male" control={<Radio style={{ color: 'white' }} />} label={<Typography style={{ color: 'white' }}>Male</Typography>} />
                             <FormControlLabel value="not-specified" control={<Radio style={{ color: 'white' }} />} label={<Typography style={{ color: 'white' }}>Not Specified</Typography>} />
@@ -124,42 +172,46 @@ function LoginPage() {
                         </Box>
                     </Box>
                 ) : (
-                <Box width="100%">
-                    <TextField
-                        label="Username or e-mail"
-                        variant="filled"
-                        fullWidth
-                        margin="normal"
-                        InputProps={{ style: { color: 'white' } }}
-                        InputLabelProps={{ style: { color: 'white' } }}
-                    />
-                    <TextField
-                        label="Password"
-                        type="password"
-                        variant="filled"
-                        fullWidth
-                        margin="normal"
-                        InputProps={{ style: { color: 'white' } }}
-                        InputLabelProps={{ style: { color: 'white' } }}
-                    />
-                    <Link href="#" color="inherit" underline="hover" alignSelf="flex-start" mb={2}>
-                        <Typography color="white">Forgot your password?</Typography>
-                    </Link>
-                    <Box display="flex" justifyContent="space-between" width="100%">
-                        <Button variant="contained" color="primary" onClick={handleCancel}>
-                            Cancel
-                        </Button>
-                        <Button variant="contained" color="secondary" onClick={handleLogin}>
-                            Log In
-                        </Button>
+                    <Box width="100%">
+                        <TextField
+                            label="Username or e-mail"
+                            variant="filled"
+                            fullWidth
+                            margin="normal"
+                            name="usernameOrEmail"
+                            value={formData.usernameOrEmail}
+                            onChange={handleInputChange}
+                            InputProps={{ style: { color: 'white' } }}
+                            InputLabelProps={{ style: { color: 'white' } }}
+                        />
+                        <TextField
+                            label="Password"
+                            type="password"
+                            variant="filled"
+                            fullWidth
+                            margin="normal"
+                            name="password"
+                            value={formData.password}
+                            onChange={handleInputChange}
+                            InputProps={{ style: { color: 'white' } }}
+                            InputLabelProps={{ style: { color: 'white' } }}
+                        />
+                        <Link href="#" color="inherit" underline="hover" alignSelf="flex-start" mb={2}>
+                            <Typography color="white">Forgot your password?</Typography>
+                        </Link>
+                        <Box display="flex" justifyContent="space-between" width="100%">
+                            <Button variant="contained" color="primary" onClick={handleCancel}>
+                                Cancel
+                            </Button>
+                            <Button variant="contained" color="secondary" onClick={handleLogin}>
+                                Log In
+                            </Button>
+                        </Box>
                     </Box>
-                </Box>
-                )  }
+                )}
             </Box>
         </Box>
     );
 }
 
 export default LoginPage;
-
-

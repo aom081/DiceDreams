@@ -1,16 +1,19 @@
-import { Outlet } from 'react-router-dom'
-import Navbar from '../components/Navbar'
-import Footer from '../components/footer'
-import * as React from 'react';
+import React from 'react';
+import { Outlet } from 'react-router-dom';
+import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
+import { Box } from '@mui/material';
 
 const Main = () => {
   return (
-    <div>
-    <navbar><Navbar /></navbar>
-    <Outlet/>
-    <Footer />
-    </div>
-  )
-}
+    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+      <Navbar />
+      <Box sx={{ flex: 1 }}>
+        <Outlet />
+      </Box>
+      <Footer />
+    </Box>
+  );
+};
 
-export default Main
+export default Main;

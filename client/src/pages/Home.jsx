@@ -6,12 +6,11 @@
 import RecipeReviewCard from '../components/RecipeReviewCard'
 import Post from '../components/Post'
 
-
 const Home = () => {
   return (
     <div >
-      <Post/>
-      <RecipeReviewCard/>
+      <Post />
+      <RecipeReviewCard />
     </div>
   )
 }

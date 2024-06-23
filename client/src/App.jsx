@@ -1,22 +1,26 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
-import { Box, CssBaseline, Drawer, List, ListItem, ListItemText, AppBar, Toolbar, Typography, Container } from '@mui/material';
+import { Box, CssBaseline, Drawer, List, ListItem, ListItemText, AppBar, Toolbar, Typography, Button } from '@mui/material';
 import HomePage from './HomePage';
 import Rules from './Rules';
+import NotificationPage from "./pages/NotificationPage";// Import the NotificationPage component
+import { AuthContext } from './AuthContext'; // Import the AuthContext
 
 const drawerWidth = 240;
 
 function App() {
+  const { isLoggedIn, login, logout } = useContext(AuthContext);
+
   return (
     <Router>
       <Box
         sx={{
           display: 'flex',
-          minHeight: '100vh', // Ensure it covers the full viewport height
-          backgroundImage: 'BGmain.jpg', // Replace with your image URL
-          backgroundSize: 'cover', // Ensure the background image covers the entire area
-          backgroundPosition: 'center', // Center the background image
-          backgroundRepeat: 'no-repeat', // Prevent the background image from repeating
+          minHeight: '100vh',
+          backgroundImage: 'url(BGmain.jpg)', // Replace with your image URL
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
         }}
       >
         <CssBaseline />
@@ -25,6 +29,16 @@ function App() {
             <Typography variant="h6" noWrap component="div">
               Game Events
             </Typography>
+            <Box sx={{ flexGrow: 1 }} />
+            {isLoggedIn ? (
+              <Button color="inherit" onClick={logout}>
+                Log out
+              </Button>
+            ) : (
+              <Button color="inherit" onClick={login}>
+                Log in
+              </Button>
+            )}
           </Toolbar>
         </AppBar>
         <Drawer
@@ -38,7 +52,7 @@ function App() {
           <Toolbar />
           <Box sx={{ overflow: 'auto' }}>
             <List>
-              {['Home', 'Events', 'Contact', 'About', 'Rules'].map((text) => (
+              {['Home', 'Events', 'Contact', 'About', 'Rules', 'Notifications'].map((text) => (
                 <ListItem button key={text} component={Link} to={`/${text.toLowerCase()}`}>
                   <ListItemText primary={text} />
                 </ListItem>
@@ -46,15 +60,14 @@ function App() {
             </List>
           </Box>
         </Drawer>
-        <Box
-          component="main"
-          sx={{ flexGrow: 1, bgcolor: 'transparent', p: 3 }} // Set bgcolor to transparent
-        >
+        <Box component="main" sx={{ flexGrow: 1, bgcolor: 'rgba(0, 0, 0, 0.5)', p: 3 }}>
           <Toolbar />
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/home" element={<HomePage />} />
             <Route path="/rules" element={<Rules />} />
+            <Route path="/notifications" element={<NotificationPage />} />
+            <Route path="*" element={<Typography variant="h6">404 Not Found</Typography>} />
           </Routes>
         </Box>
       </Box>
@@ -63,4 +76,3 @@ function App() {
 }
 
 export default App;
-
